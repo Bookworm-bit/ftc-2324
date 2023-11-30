@@ -1,0 +1,44 @@
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+public class MecanumWheelOpMode extends OpMode {
+    private DcMotor frontLeft;
+    private DcMotor frontRight;
+    private DcMotor rearLeft;
+    private DcMotor rearRight;
+
+    @Override
+    public void init() {
+        // Initialize hardware
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        rearLeft = hardwareMap.dcMotor.get("rearLeft");
+        rearRight = hardwareMap.dcMotor.get("rearRight");
+
+        // Reverse the direction of any motors if needed
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        rearRight.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    @Override
+    public void loop() {
+        // Calculate desired powers based on gamepad inputs
+        double x = -gamepad1.left_stick_x;
+        double y = -gamepad1.left_stick_y;
+        double rotation = -gamepad1.right_stick_x;
+
+        double frontLeftPower = y + x + rotation;
+        double frontRightPower = y - x - rotation;
+        double rearLeftPower = y - x + rotation;
+        double rearRightPower = y + x - rotation;
+
+        // Apply powers to the motors
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        rearLeft.setPower(rearLeftPower);
+        rearRight.setPower(rearRightPower);
+
+        // Continue with other tasks or actions
+        // ...
+    }
+}
